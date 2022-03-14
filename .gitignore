@@ -1,0 +1,13 @@
+*.Rhistory
+*.RData
+*.Ruserdata
+Report*
+*.xlsx
+*.xls
+*.txt
+*.docx
+*.doc
+*.csv
+*.tsv
+00_rawdata/
+
