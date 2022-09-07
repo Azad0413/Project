@@ -1,0 +1,8 @@
+Var1 Freq
+1 B_cell 30
+2 NK_cell 46
+3 Endothelial_cells 67
+4 Monocyte 69
+5 T_cells 104
+6 Macrophage 106
+7 Epithelial_cells 528
