@@ -1,0 +1,53 @@
+rm(list = ls())
+setwd("/data/nas1/luchunlin/project/BJTC-321")
+if (! dir.exists("./06_roc")){
+  dir.create("./06_roc")
+}
+setwd("./06_roc")
+hubgene<-read.delim2('/data/nas1/luchunlin/project/BJTC-321/05_PPI/hubgene.xls')
+dat<-read.delim2('/data/nas1/luchunlin/project/BJTC-321/00_rawdata/dat.final.xls',row.names = 1)%>%lc.tableToNum()
+group<-read.delim2("/data/nas1/luchunlin/project/BJTC-321/00_rawdata/group.xls")
+table(group$group)
+group$group = factor(group$group, levels = c("asthma", "control"))
+hub_exp<-dat[hubgene$hubgene,]
+library(ROCR)
+library(ggplot2)
+hub_exp2<-t(hub_exp)
+#hub_exp2<-cbind(group,hub_exp2)
+## 绘制ROC曲线
+library(pROC)
+for (i in c(1:14)) {
+  roc<-roc(group$group,hub_exp2[,i],levels=c("asthma", "control"))
+  png(paste0(i, ".", colnames(hub_exp2)[i],".png"),width = 300,height = 300)
+  plot(roc,
+       print.auc=T,
+       print.auc.x=0.4,print.auc.y=0.5,
+       #auc.polygon=T,
+       #auc.polygon.con="#fff7f7",
+       grid=c(0.5,0.2),
+       grid.col=c("black","black"),
+       #print.thres=T,
+       main=colnames(hub_exp2)[i],
+       col="#FF2E63",
+       legacy.axes=T)
+  dev.off()
+  pdf(paste0(i, ".", colnames(hub_exp2)[i],".pdf"),width = 4,height = 4)
+  plot(roc,
+       print.auc=T,
+       print.auc.x=0.4,print.auc.y=0.5,
+       #auc.polygon=T,
+       #auc.polygon.con="#fff7f7",
+       grid=c(0.5,0.2),
+       grid.col=c("black","black"),
+       #print.thres=T,
+       main=colnames(hub_exp2)[i],
+       col="#FF2E63",
+       legacy.axes=T)
+  dev.off()
+  i<-i+1
+}
+hubgene
+### 5个 
+hub.final<-hubgene[-c(2,3,7,11,14),]%>%as.data.frame()
+colnames(hub.final)<-'hubgene'
+write.table(hub.final,file = 'hub.final.xls',sep = '\t',row.names = F,quote = F)
