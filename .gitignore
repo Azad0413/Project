@@ -26,3 +26,7 @@
 *.tsv
 *.csv
 *.txt
+.RData
+.DataFiles/
+*.Rdata
+
